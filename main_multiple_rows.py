@@ -43,8 +43,9 @@ def main():
                                   helper.ARGUMENTS.user, helper.ARGUMENTS.password,
                                   helper.ARGUMENTS.host, helper.ARGUMENTS.database)
 
-    statement = db.LATEST_ENERGY_QUERY
-    db.read_rows(engine, statement)
+    dates = ["2022-03-04", "2022-03-03"]
+    statements = [db.data_for_date_query("power", date) for date in dates]
+    db.read_rows_multiple(engine, statements)
 
     engine.dispose()
     LOGGER.info("Engine disposed")
