@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Read Operation Top Customer Main
+Main Function
 =====================================
-Main Module for reading records in the chinook database to get the top customers
+Main Module for doing basic operation with database
 
 This script requires the following modules be installed in the python environment
 
@@ -18,13 +18,15 @@ import logging
 
 # User Imports
 import energy_services.utils as helper
+import energy_services.database as db
 
 LOGGER = logging.getLogger(__name__)
 
 
 def main():
     """
-    Main function to read records from the database to get the top albums
+    Main function to read records from the database
+
     :return: Nothing
     :rtype: None
     """
@@ -35,16 +37,14 @@ def main():
     # Configuring logging
     helper.configure_logging(log_config_file)
 
+    LOGGER.info("Creating Engine")
     # Getting a new engine
-    # engine = connections.create_new_engine(helper.ARGUMENTS.dialect, helper.ARGUMENTS.driver,
-    #                                        helper.ARGUMENTS.user, helper.ARGUMENTS.password,
-    #                                        helper.ARGUMENTS.host, helper.ARGUMENTS.database)
-    #
-    # # Getting a session factory binded to previously created engine
-    # session_factory = connections.get_session_factory(engine)
-    # session = session_factory()
-    #
-    # db_aggregate.get_top_customers(session, helper.ARGUMENTS.number)
+    engine = db.create_new_engine(helper.ARGUMENTS.dialect, helper.ARGUMENTS.driver,
+                                  helper.ARGUMENTS.user, helper.ARGUMENTS.password,
+                                  helper.ARGUMENTS.host, helper.ARGUMENTS.database)
+    db.read_rows(engine)
+    engine.dispose()
+    LOGGER.info("Engine disposed")
 
 
 if __name__ == '__main__':
