@@ -44,7 +44,7 @@ def main():
                                   helper.ARGUMENTS.host, helper.ARGUMENTS.database)
 
     dates = ["2022-03-04", "2022-03-03"]
-    statements = [db.data_for_date_query("power", date) for date in dates]
+    statements = [db.statement_for_date_query("power", date) for date in dates]
     db.read_rows_multiple(engine, statements)
 
     engine.dispose()

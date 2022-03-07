@@ -10,7 +10,7 @@ This script requires the following modules be installed in the python environmen
 
 This script contains the following function
 
-    * main - main function to call appropriate functions to perform the read operation to get the top customers
+    * main - main function to call appropriate functions to perform the read operation.
 """
 
 # Standard imports
@@ -43,7 +43,7 @@ def main():
                                   helper.ARGUMENTS.user, helper.ARGUMENTS.password,
                                   helper.ARGUMENTS.host, helper.ARGUMENTS.database)
 
-    statement = db.LATEST_ENERGY_QUERY
+    statement = db.TOTAL_ENERGY_CONSUMED_TODAY_QUERY
     db.read_rows(engine, statement)
 
     engine.dispose()

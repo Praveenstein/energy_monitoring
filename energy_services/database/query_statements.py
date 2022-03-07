@@ -25,7 +25,7 @@ TOTAL_ENERGY_CONSUMED_TODAY_QUERY = "SELECT	" \
                               "ORDER BY id LIMIT 1)"
 
 
-def data_for_date_query(parameter, date):
+def statement_for_date_query(parameter, date):
     """
     Function that returns a sql query statement to return values for given parameter and date
 
