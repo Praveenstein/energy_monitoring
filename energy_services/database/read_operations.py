@@ -19,7 +19,6 @@ import time
 # External Imports
 from sqlalchemy import text
 from sqlalchemy.engine.base import Engine
-from sqlalchemy.engine.cursor import LegacyCursorResult
 
 LOGGER = logging.getLogger(__name__)
 
@@ -47,7 +46,7 @@ ENERGY_PARAMETERS = {
 }
 
 
-def current_parameters_to_dictionary(records: LegacyCursorResult):
+def current_parameters_to_dictionary(records: list):
     """
 
     CONVERT DATABASE RECORDS TO DICTIONARY - ALL PARAMETERS
@@ -70,16 +69,12 @@ def current_parameters_to_dictionary(records: LegacyCursorResult):
         # This for loop will result in modifying the parameters dictionary such that all the
         # Key values are updated with the recent one from the database
         for parameter, value in zip(parameters.keys(), result):
-            # LOGGER.info("\n=========================\n")
-            # LOGGER.info(parameter)
-            # LOGGER.info(value)
-            # LOGGER.info("\n=========================\n")
             parameters[parameter] = str(value)
 
     return parameters
 
 
-def total_energy_to_dictionary(records: LegacyCursorResult):
+def total_energy_to_dictionary(records: list):
     """
 
     CONVERT DATABASE RECORDS TO DICTIONARY - TOTAL ENERGY
@@ -103,7 +98,7 @@ def total_energy_to_dictionary(records: LegacyCursorResult):
     return parameters
 
 
-def date_wise_parameters_to_dictionary(dates: list[str], records: LegacyCursorResult):
+def date_wise_parameters_to_dictionary(dates: list[str], records: list):
     """
 
     CONVERT DATABASE RECORDS TO DICTIONARY - DATE WISE PARAMETERS
@@ -144,20 +139,17 @@ def read_rows(engine: Engine, statement: str):
     :param statement: The query statement that is required to be executed
 
     :return: Returns the query result
-    :rtype: LegacyCursorResult
+    :rtype: list
 
     """
-    # TODO: Instead of just returning the query result as legacycursor use methods like .all(), .any etc to convert
-    # It into a list and the return
 
     # Opening a connection to the database
     with engine.connect() as conn:
 
-        query_result = conn.execute(text(statement))
         start_time = time.time()
-        query_result = conn.execute(text(statement))
+        query_result = conn.execute(text(statement)).all()
         end_time = time.time()
-        LOGGER.info("Total Time for Reading Data: {time} seconds".format(time=(end_time - start_time)))
+        LOGGER.info("Total Time for Reading Data: {time} seconds".format(time=round((end_time - start_time), 4)))
 
     return query_result
 
@@ -172,17 +164,15 @@ def read_rows_multiple(engine: Engine, statements: list[str]):
     :param statements: An array containing the query statements that are required to be executed
 
     :return: Returns the query result
-    :rtype: LegacyCursorResult
+    :rtype: list
 
     """
-    # TODO: Instead of just returning the query result as legacycursor use methods like .all(), .any etc to convert
-    # It into a list and the return
 
     with engine.connect() as conn:
 
         start_time = time.time()
-        query_results = [conn.execute(text(statement)) for statement in statements]
+        query_results = [conn.execute(text(statement)).all() for statement in statements]
         end_time = time.time()
-        LOGGER.info("Total Time for Reading Data: {time} Milliseconds".format(time=(end_time - start_time) * 1000))
+        LOGGER.info("Total Time for Reading Data: {time} Milliseconds".format(time=round((end_time - start_time), 4)))
 
     return query_results
