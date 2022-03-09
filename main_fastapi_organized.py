@@ -54,8 +54,8 @@ def main():
 
     # Getting a new engine
     db_engine = db.create_new_engine(helper.ARGUMENTS.dialect, helper.ARGUMENTS.driver,
-                                                     helper.ARGUMENTS.user, helper.ARGUMENTS.password,
-                                                     helper.ARGUMENTS.host, helper.ARGUMENTS.database)
+                                     helper.ARGUMENTS.user, helper.ARGUMENTS.password,
+                                     helper.ARGUMENTS.host, helper.ARGUMENTS.database)
 
     # Initializing the global engine variable to the newly created sqlalchemy engine created above
     db.initialize_global_engine(db_engine)
@@ -84,5 +84,4 @@ def main():
 
 
 if __name__ == "__main__":
-
     main()
