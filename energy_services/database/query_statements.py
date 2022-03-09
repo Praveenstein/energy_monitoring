@@ -17,7 +17,7 @@ import logging
 LOGGER = logging.getLogger(__name__)
 
 # Some Global variables that we'll be using for storing the sql statements
-LATEST_ENERGY_QUERY = "SELECT * FROM u759114105_energy_meter.energy_lmeasure ORDER BY id DESC LIMIT 1"
+LATEST_ALL_PARAMETER_QUERY = "SELECT * FROM u759114105_energy_meter.energy_lmeasure ORDER BY id DESC LIMIT 1"
 
 TOTAL_ENERGY_CONSUMED_TODAY_QUERY = "SELECT	" \
                               "(SELECT energy FROM u759114105_energy_meter.energy_lmeasure ORDER BY id DESC LIMIT 1)-" \

@@ -43,8 +43,12 @@ def main():
                                   helper.ARGUMENTS.user, helper.ARGUMENTS.password,
                                   helper.ARGUMENTS.host, helper.ARGUMENTS.database)
 
-    statement = db.TOTAL_ENERGY_CONSUMED_TODAY_QUERY
-    db.read_rows(engine, statement)
+    #statement = db.LATEST_ALL_PARAMETER_QUERY
+    statement = "SELECT 2"
+    database_records = db.read_rows(engine, statement)
+    data = db.current_parameters_to_dictionary(database_records)
+
+    LOGGER.info(data)
 
     engine.dispose()
     LOGGER.info("Engine disposed")

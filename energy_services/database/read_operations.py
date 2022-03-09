@@ -9,7 +9,7 @@ This script requires the following modules be installed in the python environmen
     * logging - to perform logging operations
 
 This script contains the following function
-    * perform_read_join - Function to perform read operation with the database using inner joins
+    *
 """
 
 # Standard Imports
@@ -47,7 +47,7 @@ ENERGY_PARAMETERS = {
 }
 
 
-def current_energy_to_dictionary(records: LegacyCursorResult):
+def current_parameters_to_dictionary(records: LegacyCursorResult):
     """
 
     CONVERT DATABASE RECORDS TO DICTIONARY - ALL PARAMETERS
@@ -153,10 +153,11 @@ def read_rows(engine: Engine, statement: str):
     # Opening a connection to the database
     with engine.connect() as conn:
 
+        query_result = conn.execute(text(statement))
         start_time = time.time()
         query_result = conn.execute(text(statement))
         end_time = time.time()
-        LOGGER.info("Total Time for Reading Data: {time} ms".format(time=(end_time - start_time) * 1000))
+        LOGGER.info("Total Time for Reading Data: {time} seconds".format(time=(end_time - start_time)))
 
     return query_result
 

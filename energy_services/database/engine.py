@@ -12,8 +12,11 @@ import logging
 
 # External Imports
 from sqlalchemy import create_engine
+from sqlalchemy.engine.base import Engine
 
 LOGGER = logging.getLogger(__name__)
+
+GLOBAL_DATABASE_ENGINE = None
 
 
 def create_new_engine(dialect, driver, user, password, host, database):
@@ -53,3 +56,35 @@ def create_new_engine(dialect, driver, user, password, host, database):
     except AttributeError as err:
         LOGGER.error(err)
         raise
+
+
+def initialize_global_engine(engine: Engine):
+    """
+    Function used to initialize the global engine variable ( from the main script)
+
+    :param engine: The sqlalchemy engine used to connect to the database
+
+    :return: Nothing
+    :rtype: None
+    """
+
+    global GLOBAL_DATABASE_ENGINE
+    GLOBAL_DATABASE_ENGINE = engine
+
+
+def get_engine():
+    """
+    GET ENGINE
+    ============
+
+    This function is used as the generator function that is required (to send the engine) for a parameter(engine)
+    inside the read_root api.
+
+    :return: SqlAlchemy Engine
+    :rtype: Engine
+    """
+
+    try:
+        yield GLOBAL_DATABASE_ENGINE
+    except Exception as error:
+        LOGGER.error(error)
