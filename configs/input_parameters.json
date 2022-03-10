@@ -1,0 +1,15 @@
+{
+      "logfile": "configs\\log.json",
+
+      "dialect": "mysql",
+
+      "driver": "pymysql",
+
+      "user": "u759114105_smddc_energy",
+
+      "host": "185.214.124.4:3306",
+
+      "password": "Cmticmti2019",
+
+      "database": "u759114105_energy_meter"
+}

@@ -80,7 +80,7 @@ def main():
     app.include_router(security_routes.ROUTER)
     app.include_router(user_routes.ROUTER)
 
-    uvicorn.run(app, host="172.18.7.27", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
 
 
 if __name__ == "__main__":
