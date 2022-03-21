@@ -120,7 +120,7 @@ def date_wise_parameters_to_dictionary(dates: list[str], records: list):
     for result in records:
         individual_data = []
         for row in result:
-            individual_data.append(row[0])
+            individual_data.append([row[0], row[1]])
         parameters_list.append(individual_data)
 
     parameters = {date: values for date, values in zip(dates, parameters_list)}
@@ -173,6 +173,6 @@ def read_rows_multiple(engine: Engine, statements: list[str]):
         start_time = time.time()
         query_results = [conn.execute(text(statement)).all() for statement in statements]
         end_time = time.time()
-        LOGGER.info("Total Time for Reading Data: {time} Milliseconds".format(time=round((end_time - start_time), 4)))
+        LOGGER.info("Total Time for Reading Data: {time} Seconds".format(time=round((end_time - start_time), 4)))
 
     return query_results

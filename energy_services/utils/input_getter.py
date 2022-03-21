@@ -12,7 +12,7 @@ This script contains the following function
 import argparse
 import json
 
-INPUT_PARAMETER_FILE = "configs\\input_parameters.json"
+INPUT_PARAMETER_FILE = "configs/input_parameters.json"
 
 
 def get_input_arguments():

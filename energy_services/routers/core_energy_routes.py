@@ -15,6 +15,7 @@ environment you are running this script in.
 
 # Standard Imports
 import logging
+from typing import Optional
 
 # External Imports
 from fastapi import APIRouter, Depends
@@ -26,10 +27,11 @@ import energy_services.database as db
 
 LOGGER = logging.getLogger(__name__)
 
+# Depends(get_current_active_user)
 ROUTER = APIRouter(
     prefix="/energy_meter/energy_core",
     tags=["Core Energy Routes"],
-    dependencies=[Depends(get_current_active_user)],
+    dependencies=[],
     responses={404: {"description": "Not found"}},)
 
 
@@ -76,7 +78,9 @@ async def read_total_energy(engine: Engine = Depends(db.get_engine)):
 
 
 @ROUTER.get("/read_parameter_multiple")
-async def read_parameter_multiple(parameter: str, date_1: str, date_2: str, engine: Engine = Depends(db.get_engine)):
+async def read_parameter_multiple(parameter: str, date_1: str, date_2:  Optional[str] = None,
+                                  date_3:  Optional[str] = None, date_4:  Optional[str] = None,
+                                  date_5:  Optional[str] = None, engine: Engine = Depends(db.get_engine)):
     """
 
     GET PARAMETER VALUES FOR GIVEN DATE
@@ -87,6 +91,9 @@ async def read_parameter_multiple(parameter: str, date_1: str, date_2: str, engi
 
     :param date_1: Date 1 for which all parameter values need to be sent
     :param date_2: Date 2 for which all parameter values need to be sent
+    :param date_3: Date 3 for which all parameter values need to be sent
+    :param date_4: Date 4 for which all parameter values need to be sent
+    :param date_5: Date 5 for which all parameter values need to be sent
     :param parameter: The parameter that needs to be read from the database ( such as power, energy etc)
     :param engine: The SqlAlchemy engine used to connect to the database
 
@@ -95,9 +102,12 @@ async def read_parameter_multiple(parameter: str, date_1: str, date_2: str, engi
 
     """
 
-    # TODO: Change the parameter date_1, date_2 to something of array type
+    dates = [date_1, date_2, date_3, date_4, date_5]
 
-    dates = [date_1, date_2]
+    # Filtering out the dates that are not given
+    dates = list(filter(lambda date: date is not None, dates))
+
+    # For every date we're creating a new sql query statement
     statements = [db.statement_for_date_query(parameter, date) for date in dates]
     records = db.read_rows_multiple(engine, statements)
 

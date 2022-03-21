@@ -43,9 +43,12 @@ def main():
                                   helper.ARGUMENTS.user, helper.ARGUMENTS.password,
                                   helper.ARGUMENTS.host, helper.ARGUMENTS.database)
 
-    dates = ["2022-03-04", "2022-03-03"]
+    dates = ["2022-03-06", "2022-03-07", "2022-03-08", "2022-03-09", "2022-03-10"]
     statements = [db.statement_for_date_query("power", date) for date in dates]
-    db.read_rows_multiple(engine, statements)
+    records = db.read_rows_multiple(engine, statements)
+    data = db.date_wise_parameters_to_dictionary(dates, records)
+
+    LOGGER.info(data['2022-03-07'])
 
     engine.dispose()
     LOGGER.info("Engine disposed")

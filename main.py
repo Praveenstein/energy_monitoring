@@ -51,11 +51,11 @@ LOGGER.info("Engine Creation Over")
 
 LOGGER.info("Creating the FastApi application")
 
-APP = FastAPI()
+app = FastAPI()
 
 ORGINS = ["*"]
 
-APP.add_middleware(
+app.add_middleware(
     CORSMiddleware,
     allow_origins=ORGINS,
     allow_credentials=True,
@@ -63,6 +63,6 @@ APP.add_middleware(
     allow_headers=["*"],
 )
 
-APP.include_router(core_energy_routes.ROUTER)
-APP.include_router(security_routes.ROUTER)
-APP.include_router(user_routes.ROUTER)
+app.include_router(core_energy_routes.ROUTER)
+app.include_router(security_routes.ROUTER)
+app.include_router(user_routes.ROUTER)

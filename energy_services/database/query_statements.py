@@ -36,6 +36,7 @@ def statement_for_date_query(parameter, date):
     :return: The sql query to get the values
     :rtype: str
     """
-    statement = f"SELECT {parameter} FROM u759114105_energy_meter.energy_lmeasure WHERE date = '{date}' LIMIT 10"
+    statement = f"SELECT timestamp, {parameter} FROM u759114105_energy_meter.energy_lmeasure WHERE date = '{date}' " \
+                f"LIMIT 100000"
     LOGGER.info(statement)
     return statement

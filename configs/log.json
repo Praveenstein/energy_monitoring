@@ -19,7 +19,7 @@
         "file": {
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "files",
-            "filename": "D:\\PS-CMTI\\Codes\\PycharmProjects\\energy_monitoring\\energy_main\\logs\\logs.log",
+            "filename": "logs/logs.log",
             "backupCount": 3,
             "mode": "a"
         }

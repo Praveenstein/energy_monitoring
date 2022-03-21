@@ -24,10 +24,11 @@ from .router_dependencies import User, get_current_active_user
 
 LOGGER = logging.getLogger(__name__)
 
+# Depends(get_current_active_user)
 ROUTER = APIRouter(
     prefix="/energy_meter/users",
     tags=["User Routes"],
-    dependencies=[Depends(get_current_active_user)],
+    dependencies=[],
     responses={404: {"description": "Not found"}},)
 
 
