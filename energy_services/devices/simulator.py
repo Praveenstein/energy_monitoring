@@ -112,25 +112,30 @@ def generate_current_data(choice_of_states):
 def main():
 
     tcp_server = "127.0.0.1"  # The server's hostname or IP address
-    tcp_server_port = 65432  # The port used by the server
+    tcp_server_port = 8094  # The port used by the server
     try:
 
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as socket_object:
+            print("Socket Created")
             socket_object.connect((tcp_server, tcp_server_port))
+            print("Connection Created")
 
             for _ in range(10):
                 choice_of_states = machine_states()
                 raw_data = generate_current_data(choice_of_states)
 
-                for data in raw_data:
+                for index, data in enumerate(raw_data):
 
-                    message = {"device": "htm_stallion_200",
-                               "current": data,
-                               "time": time.time()}
-                    message = json.dumps(message)
-                    socket_object.sendall(message.encode())
+                    # message = {"device": "htm_stallion_200",
+                    #            "current": data,
+                    #            "time": time.time()}
+                    # message = json.dumps(message)
+                    message = f"energy,device=htm_stallion_200 current={round(data, 4)},number={index}" \
+                              f" {int(time.time())}\n"
+                    socket_object.sendall(message.encode("utf8"))
                     #data = socket_object.recv(1024)
                     #print(f"Received {data.decode()}")
+                    print(message)
                     time.sleep(2)
     except Exception as error:
         LOGGER.exception(error)
