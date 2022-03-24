@@ -16,10 +16,11 @@ import logging
 import random
 import socket
 import time
-import json
+from datetime import datetime
+import pytz
 
 # External Imports
-import plotly.graph_objects as go
+# import plotly.graph_objects as go
 
 LOGGER = logging.getLogger(__name__)
 
@@ -111,6 +112,7 @@ def generate_current_data(choice_of_states):
 
 def main():
 
+    ist = pytz.timezone('Asia/Kolkata')
     tcp_server = "127.0.0.1"  # The server's hostname or IP address
     tcp_server_port = 8094  # The port used by the server
     try:
@@ -125,16 +127,10 @@ def main():
                 raw_data = generate_current_data(choice_of_states)
 
                 for index, data in enumerate(raw_data):
-
-                    # message = {"device": "htm_stallion_200",
-                    #            "current": data,
-                    #            "time": time.time()}
-                    # message = json.dumps(message)
+                    local_time = time.time_ns()
                     message = f"energy,device=htm_stallion_200 current={round(data, 4)},number={index}" \
-                              f" {int(time.time())}\n"
+                              f" {local_time}\n"
                     socket_object.sendall(message.encode("utf8"))
-                    #data = socket_object.recv(1024)
-                    #print(f"Received {data.decode()}")
                     print(message)
                     time.sleep(2)
     except Exception as error:
