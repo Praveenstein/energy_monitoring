@@ -67,38 +67,47 @@ def generate_current_data(choice_of_states):
     previous_time_for_state_change = 481
 
     while True:
-        status_key = random.choice(list(choice_of_states.keys()))
-        if (previous_state == "MACHINE_OFF") and (status_key == "MACHINE_PRODUCTION"):
-            continue
-        if (previous_state == "MACHINE_PRODUCTION") and (status_key == "MACHINE_OFF"):
-            continue
 
-        current_machine_status = choice_of_states[status_key]
-        machining_time = random.randint(current_machine_status[1][0], current_machine_status[1][1])
+        number_of_production_cycles = random.randint(10, 20)
 
-        LOGGER.info("============================")
-        LOGGER.info(f"Current Status: {status_key}")
-        LOGGER.info(f"Previous Status: {previous_state}")
-        LOGGER.info(f"Time: {machining_time}")
-        remaining_time -= machining_time
+        for _ in range(number_of_production_cycles):
 
-        LOGGER.info(f"Remaining Time: {remaining_time}")
+            for state in ["MACHINE_ON", "MACHINE_PRODUCTION"]:
 
-        LOGGER.info("==============================")
+                status_key = state
+
+                current_machine_status = choice_of_states[status_key]
+                machining_time = random.randint(current_machine_status[1][0], current_machine_status[1][1])
+
+                LOGGER.info("============================")
+                LOGGER.info(f"Current Status: {status_key}")
+                LOGGER.info(f"Previous Status: {previous_state}")
+                LOGGER.info(f"Time: {machining_time}")
+                remaining_time -= machining_time
+
+                LOGGER.info(f"Remaining Time: {remaining_time}")
+
+                LOGGER.info("==============================")
+
+                if remaining_time - 180 < 0:
+                    break
+
+                if previous_state == status_key:
+                    previous_time_for_state_change += machining_time
+                else:
+                    overall_machine_status.append((previous_time_for_state_change, current_machine_status[-1]))
+                    previous_time_for_state_change += machining_time
+
+                points = generate_points(machining_time, current_machine_status)
+                raw_data.extend(points)
+                previous_state = status_key
+
+            if remaining_time - 180 < 0:
+                break
 
         if remaining_time - 180 < 0:
             remaining_time += machining_time
             break
-
-        if previous_state == status_key:
-            previous_time_for_state_change += machining_time
-        else:
-            overall_machine_status.append((previous_time_for_state_change, current_machine_status[-1]))
-            previous_time_for_state_change += machining_time
-
-        points = generate_points(machining_time, current_machine_status)
-        raw_data.extend(points)
-        previous_state = status_key
 
     closing_on_points = generate_points(remaining_time - 180, choice_of_states["MACHINE_ON"])
     raw_data.extend(closing_on_points)
@@ -122,7 +131,7 @@ def main():
             socket_object.connect((tcp_server, tcp_server_port))
             print("Connection Created")
 
-            for _ in range(10):
+            while True:
                 choice_of_states = machine_states()
                 raw_data = generate_current_data(choice_of_states)
 
